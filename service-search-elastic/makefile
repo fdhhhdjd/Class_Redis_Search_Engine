@@ -28,5 +28,8 @@ into-source-redis:
 	docker exec -it  $(DOCKER_EXEC_CACHE) sh
 
 remove-image-none:
-	docker images --filter "dangling=true" -q --no-trunc | xargs -r docker rmi || true                       
+	docker images --filter "dangling=true" -q --no-trunc | xargs -r docker rmi || true 
+
+create-token:
+	curl -X POST -u elastic:taidev "localhost:9200/_security/service/elastic/kibana/credential/token/token1?pretty" 
 

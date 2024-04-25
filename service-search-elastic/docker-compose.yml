@@ -23,28 +23,32 @@ services:
             - service_search_service-network
 
     # Todo: 2. Elastic search
-    elastic-search:
-        container_name: elastic-search
+    elasticsearch:
+        container_name: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
         environment:
-            - xpack.security.enabled=false
-            - 'discovery.type=single-node'
+            node.name: elasticsearch
+            ES_JAVA_OPTS: -Xms512m -Xmx512m
+            discovery.type: single-node
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
         volumes:
-            - elasticsearch-data:/usr/share/elasticsearch/data
+            - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+            - elasticsearch-data:/usr/share/elasticsearch/data:Z
         ports:
             - ${ELASTIC_SEARCH_PORT}:${ELASTIC_SEARCH_PORT}
         env_file:
             - .env
         networks:
-            - service_search_service-network
+        - elk
 
     kibana:
         container_name: kibana
         image: docker.elastic.co/kibana/kibana:8.4.3
         depends_on:
-            - elastic-search
+            - elasticsearch
         environment:
-            - ELASTICSEARCH_HOSTS=${ELASTIC_SEARCH_HOST}
+            ELASTICSEARCH_HOSTS: ${ELASTIC_SEARCH_HOST:-}
+            ELASTICSEARCH_SERVICEACCOUNTTOKEN: ${ELASTIC_TOKEN:-}
         ulimits:
             memlock:
                 soft: -1
@@ -54,14 +58,16 @@ services:
                 hard: 65536
         cap_add:
             - IPC_LOCK
+        links:
+            - elasticsearch
         ports:
             - ${KIBANA_PORT}:${KIBANA_PORT}
         env_file:
             - .env
         networks:
-            - service_search_service-network
+            - elk
 networks:
-    service_search_service-network:
+    elk:
         driver: bridge
 
 volumes:
