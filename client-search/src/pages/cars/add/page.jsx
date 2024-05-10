@@ -24,10 +24,16 @@ const AddCarPage = () => {
       return toast.error("Please fill in all fields");
     }
     try {
-      const response = await fetch("http://localhost:2000/api/v1/cars/create", {
+      const username = "elastic"; 
+      const password = "rvfyXraoEchd5S3g4k5J"; 
+
+      const credentials = btoa(`${username}:${password}`);
+      const authorizationHeader = `Basic ${credentials}`;
+      const response = await fetch("http://localhost:9200/car_info/_doc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": authorizationHeader
         },
         body: JSON.stringify(formData),
       });

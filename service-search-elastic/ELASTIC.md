@@ -229,3 +229,43 @@ GET product_info/_search
   ]
 }
 ```
+
+# Search flow sentence
+```cmd
+POST product_info/_search
+{
+  "query": {
+    "match_phrase": {
+      "fullname": "Van"
+    }
+  }
+}
+```
+
+# Search flow prefix - sunfix
+```cmd
+POST product_info/_search
+{
+  "query": {
+    "match_phrase_prefix": {
+      "fullname": {
+        "query": "ag"
+      }
+    }
+  }
+}
+```
+
+```cmd
+POST product_info/_search
+{
+  "query": {
+    "match_phrase_prefix": {
+      "fullname": {
+        "query": "nguy",
+        "max_expansions": 2
+      }
+    }
+  }
+}
+```
