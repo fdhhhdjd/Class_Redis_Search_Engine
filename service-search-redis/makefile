@@ -12,7 +12,7 @@ default:
 	docker ps
 
 run-build:
-	sudo docker-compose -f $(DOCKER_COMPOSE) up -d --build
+	docker-compose -f $(DOCKER_COMPOSE) up -d --build
 	make remove-image-none
 
 run-dev:

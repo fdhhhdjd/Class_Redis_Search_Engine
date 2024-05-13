@@ -13,7 +13,7 @@ const MoviePage = () => {
   const handleSearch = async () => {
     try {
       const response = await fetch(
-        `http://localhost:2000/api/v1/movies/search/idx?idx=idx:movie&query=${query}`
+        `http://localhost:5000/api/v1/movies/search/idx?idx=idx:movie&query=${query}`
       );
       const data = await response.json();
       setResults(data?.metadata?.documents);

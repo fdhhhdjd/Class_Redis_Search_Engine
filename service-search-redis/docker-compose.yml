@@ -32,7 +32,7 @@ services:
             - .env
         command: sh /data/import-data.sh
         ports:
-            - ${REDIS_MAPPING}:${REDIS_PORT}
+            - ${REDIS_PORT}:${REDIS_PORT}
         networks:
             - service_search_service-network
         healthcheck:
